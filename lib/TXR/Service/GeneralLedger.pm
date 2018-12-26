@@ -15,13 +15,22 @@ sub new {
 }
 
 # 総勘定元帳ヘッダー
-my @generak_ledger_header = (
+my @generak_ledger_en_header = (
    'date',
    'counter_title',
+   'summary',
    'debit_amount',
    'credit_amount',
-   'summary',
    'balance',
+);
+
+my @generak_ledger_ja_header = (
+   '日付',
+   '相手科目',
+   '摘要',
+   '借方金額',
+   '貸方金額',
+   '残高',
 );
 
 # to accessor
@@ -34,6 +43,7 @@ sub spew {
 
   while (my ($title, $title_data) = each (%$slip) ) {
       $self->drawer->write(sprintf("[%s]", $title));
+      $self->drawer->write_as_csv(@generak_ledger_ja_header);
       my %title_data = %{$title_data};
       my $default_balance = get_default_balance($title);
       my $balance = $default_balance;
@@ -48,15 +58,17 @@ sub spew {
 
         my %total = %total_default;
         my $month_data = $title_data{$month};
+
         # dump_out($month_data);
         if ($month_data && ref($month_data) eq 'ARRAY') {
+
           foreach my $rec (@{$month_data}) {
 #dump_out($rec);
 
             # ソートは多分いらない
             # どっちかによるのか
             $balance = $balance
-                     + $rec->{debit_amount};
+                     + $rec->{debit_amount}
                      - $rec->{credit_amount}
                      ;
 #print_out($balance);
@@ -64,28 +76,46 @@ sub spew {
             $total{$month}{credit} += $rec->{credit_amount};
             my $date = parse_datetime($rec->{date})->strftime("%m-%d");
 
-            $self->drawer->write(sprintf("|%s|\t%s\t|\t%s\t|\t% 6s\t|\t% 6s\t|\t% 6s|",
+            #$self->drawer->write(sprintf("|%s|\t%s\t|\t%s\t|\t% 6s\t|\t% 6s\t|\t% 6s|",
+            #     $date || "",
+            #     $rec->{counter_title} || "ーーー",
+            #     $rec->{summary} || "ーーー",
+            #     comma($rec->{debit_amount})  || 0,
+            #     comma($rec->{credit_amount}) || 0,
+            #     comma($balance) || 0));
+            $self->drawer->write_as_csv(
                  $date || "",
-                 $rec->{counter_title} || "ーーー",
-                 $rec->{summary} || "ーーー",
+                 $rec->{counter_title} || "(unkown)",
+                 $rec->{summary} || "(unkown)",
                  comma($rec->{debit_amount})  || 0,
                  comma($rec->{credit_amount}) || 0,
-                 comma($balance) || 0));
-
+                 comma($balance) || 0
+            );
           }
-          $self->drawer->write("\n");
+
+          # 月末処理
+          $self->drawer->write_as_csv(
+            undef,
+            sprintf("%s月小計", $month),
+            undef,
+            comma($total{$month}{debit}),
+            comma($total{$month}{credit}),
+            comma($balance)
+          );
+          $self->drawer->write_as_csv(
+            undef,
+            sprintf("%s月累計", $month),
+            undef,
+            undef,
+            undef,
+            comma($balance)
+          );
+          # 改行が必要になる
         }
 
-        # 月末処理
-        #$self->drawer->write(sprintf(",Month total,,%s,%s,",
-        #    $total->{$month}{debit},
-        #    $total->{$month}{credit},
-        #));
-
-
-      }
-
-  }
+      }# END of MONTH
+      $self->drawer->write("\n");
+  }# END of TITLE
 
 }
 
