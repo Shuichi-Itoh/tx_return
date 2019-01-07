@@ -7,9 +7,10 @@ use DateTime;
 use HTTP::Date;
 use Data::Dumper;
 use Scalar::Util qw(blessed);
+use Carp;
 our @datetime= qw/parse_datetime/;
-our @filter = qw/trim uncomma comma/;
-our @common = qw/print_out dump_out/;
+our @filter = qw/trim trim_nl uncomma comma/;
+our @common = qw/print_out dump_out warn_out/;
 our @EXPORT;
 our @EXPORT_OK   = (
   @datetime,
@@ -42,16 +43,23 @@ sub parse_datetime {
 # our @filter
 #----------------------
 sub trim {
-	my $text = shift;
-	$text =~ s{
-    ^\s*
-    (.*?)
-    \s*$
-  }
-  {$1}xms;
-	return $text;
+    my $text = shift;
+    return "" if !$text;
+    $text =~ s{
+        ^\s*
+        (.*?)
+        \s*$
+    }
+    {$1}xms;
+    return $text;
 }
 
+sub trim_nl {
+    my $text = shift;
+    return "" if !$text;
+    $text =~ s/(\r\n|\r|\n)$//g;
+    return $text;
+}
 sub uncomma {
   my $number = shift;
   my @numbers = $number =~ /\d+/g;
@@ -79,6 +87,11 @@ sub comma {
 sub print_out {
   my $text = shift;
   print encode_utf8($text) . "\n";
+}
+
+sub warn_out {
+  my $text = shift;
+  carp($text . "\n");
 }
 
 sub dump_out {

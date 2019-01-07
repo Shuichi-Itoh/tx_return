@@ -17,18 +17,37 @@ sub csv_xs {
 
 sub parse_line {
     my ($self, $line) = @_;
+    $line = trim_nl($line);
+    return 0 if !$line;
     #CSV変換
-    $line = decode('Shift_JIS', $line);
+    #$line = decode('Shift_JIS', $line);
     $self->csv_xs->parse($line);
+    if (!$self->csv_xs->status) {
+        warn_out("ERROR INPUT 1", $self->csv_xs->error_input);
+        warn_out("ERROR INPUT 2", $line);
+        return 0;
+    }
     my @fileds = $self->csv_xs->fields();
 
     my @headers = $self->transfer_slip_headers;
     my %line = map { $_ => trim(shift @fileds) } @headers;
+    if (!$line{'date'}) {
+        warn_out(sprintf("[%s] is no dateline", $line));
+        dump_out(\%line);
+        dump_out(\@fileds);
+        warn "!!!!!!";
+        return 0;
+    }
+    warn_out(sprintf("[%s] is debit title not found!", $line))
+        if !$line{'debit_title'};
+    warn_out(sprintf("[%s] is credit title not found!", $line))
+        if !$line{'credit_title'};
+
     my $this_month = parse_datetime($line{'date'})->month;
     $line{'debit_amount'} = uncomma($line{'debit_amount'});
     $line{'credit_amount'} = uncomma($line{'credit_amount'});
 
-    return %line;
+    return \%line;
 }
 
 # 振替伝票ヘッダー
@@ -67,10 +86,11 @@ sub read_csv {
     shift @line; # 一行目捨てとく
 
     # 行ごと
+    my $i = 1;
     foreach my $line (@line) {
-
     # csvをハッシュ構造へ
-    my %line = $self->parse_line($line);
+    my $line = $self->parse_line($line);
+    next unless $line;
 
     my @pair = (
       { credit => 'debit'  },
@@ -84,13 +104,13 @@ sub read_csv {
           my $counter_amount = "${counter}_amount";
 
           # コピー
-          my %contents = %line;
+          my %contents = %$line;
           # 上書き
           $contents{$counter_amount} = 0;
-          $contents{'counter_title'} = $line{$counter_title};
+          $contents{'counter_title'} = $line->{$counter_title};
 
-          my $title = $line{$title_key};
-          my $this_month = parse_datetime($line{'date'})->month;
+          my $title = $line->{$title_key};
+          my $this_month = parse_datetime($line->{'date'})->month;
 
           my @records;
           if ($data{$title} && ($data{$title}{$this_month})) {

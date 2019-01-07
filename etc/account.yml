@@ -1,0 +1,31 @@
+# Capital is Left Side
+capital:
+  - 資本金
+# assets is Left Side
+assets:
+  - 現金
+  - 普通預金
+  - 事業主貸
+  - 売掛金
+# Liabilities is Right Side
+liabilities:
+  - 未払金
+  - 事業主借
+# Income is Right Side
+income:
+  - 売上
+  - 雑収入
+# Expenditure is Left Side
+expenditure:
+  - 会議費
+  - 旅費交通費
+  - 交際費
+  - 研修費
+  - 地代家賃
+  - 租税公課
+  - 水道光熱費
+  - 通信費
+  - 消耗品費
+  - 雑費
+  - 利子割引料
+  - 支払手数料

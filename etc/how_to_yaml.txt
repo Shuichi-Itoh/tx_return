@@ -1,6 +1,6 @@
 # https://magazine.rubyist.net/articles/0009/0009-YAML.html#%E9%85%8D%E5%88%97%E3%81%A8%E3%83%8F%E3%83%83%E3%82%B7%E3%83%#A5%E3%81%AE%E3%83%8D%E3%82%B9%E3%83%88
-# 
-# ƒuƒƒbƒNƒXƒ^ƒCƒ‹ ”z—ñ
+#
+# ãƒ–ãƒ­ãƒƒã‚¯ã‚¹ã‚¿ã‚¤ãƒ« é…åˆ—
 # - aaa
 # -
 #   - b1
@@ -9,14 +9,14 @@
 #     - b3.1
 #     - b3.2
 # - ccc
-# 
-# ƒuƒƒbƒNƒXƒ^ƒCƒ‹ ƒnƒbƒVƒ…
+#
+# ãƒ–ãƒ­ãƒƒã‚¯ã‚¹ã‚¿ã‚¤ãƒ« ãƒãƒƒã‚·ãƒ¥
 # A: aaa
 # B: bbb
 # C: ccc
-# 
-# ƒtƒ[ƒXƒ^ƒCƒ‹  ”z—ñ
+#
+# ãƒ•ãƒ­ãƒ¼ã‚¹ã‚¿ã‚¤ãƒ«  é…åˆ—
 # [aaa, bbb, ccc]
-# 
-# # ƒtƒ[ƒXƒ^ƒCƒ‹  ƒnƒbƒVƒ… ƒRƒƒ“u:v‚Ì‚ ‚Æ‚É‚Í”¼Šp‹ó”’
+#
+# # ãƒ•ãƒ­ãƒ¼ã‚¹ã‚¿ã‚¤ãƒ«  ãƒãƒƒã‚·ãƒ¥ ã‚³ãƒ­ãƒ³ã€Œ:ã€ã®ã‚ã¨ã«ã¯åŠè§’ç©ºç™½
 # { A: aaa, B: bbb, C: ccc }
