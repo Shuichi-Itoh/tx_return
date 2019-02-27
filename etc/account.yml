@@ -1,31 +1,41 @@
-# Capital is Left Side
-capital:
-  - 資本金
-# assets is Left Side
 assets:
   - 現金
-  - 普通預金
-  - 事業主貸
+  - 普通預金 #＝その他の預金
+#  - 事業主貸 ここだが、Capital に書く。
   - 売掛金
-# Liabilities is Right Side
+  - 建物
+  - 建物付属設備
 liabilities:
   - 未払金
+  - 借入金
+capital:
+  - 事業主貸
   - 事業主借
-# Income is Right Side
+  - 元入金
 income:
   - 売上
+  - 賃料
   - 雑収入
-# Expenditure is Left Side
 expenditure:
-  - 会議費
-  - 旅費交通費
-  - 交際費
-  - 研修費
-  - 地代家賃
   - 租税公課
   - 水道光熱費
+  - 旅費交通費
   - 通信費
+  - 広告宣伝費
+  - 接待交際費
+  - 修繕費
   - 消耗品費
-  - 雑費
   - 利子割引料
+  - 地代家賃
+  - 研修費
+  - 会議費
+  - 新聞図書費
+  - 研究費
+  - 借入金利子
   - 支払手数料
+  - 雑費
+  - 租税公課（不動産）
+  - 損害保険料（不動産）
+  - 減価償却費（不動産）
+  - 利子割引料（不動産）
+  - 管理費（不動産）

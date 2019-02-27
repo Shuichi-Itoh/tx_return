@@ -1,5 +1,7 @@
 # tx_return
 
-#Modules
+Modules
 Text::CSV_XS
 Path::Class
+Tie::IxHash
+Encode::Guess

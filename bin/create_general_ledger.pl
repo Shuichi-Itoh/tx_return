@@ -25,5 +25,5 @@ my $sv_genera_ledger = TXR::Service::GeneralLedger->new;
 my $transfer_slip_data = $sv_transfer_slip->read_csv($csv_transfer_slip);
 my $trial_data = $sv_genera_ledger->spew($transfer_slip_data);
 # dump_out($trial_data);
-my $sv_trial_blance = TXR::Service::TrialBalance->new;
-$sv_trial_blance->spew($trial_data);
+my $sv_trial_blance = TXR::Service::TrialBalance->new($trial_data);
+$sv_trial_blance->spew();
